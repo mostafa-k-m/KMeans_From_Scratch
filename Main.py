@@ -23,20 +23,16 @@ class KMeans:
     def m_selector(self, data):
         index_c1 = np.random.randint(0,data.shape[0])
         c1 = data[index_c1]
-        distance_to_c1 = self.distance_calculator(data,c1)
-        index_c2 = np.argmax(distance_to_c1)
-        c2 = data[index_c2]
-        data = np.delete(data,(index_c1,index_c2),axis = 0)
-        centroids = [c1, c2]
-        distances = self.distance_calculator(data,c1)*self.distance_calculator(data,c2)
-        if self.K>2:
-            for i in range(0,self.K-2):
-                index_cx = np.argmax(distances)
-                cx = data[index_cx]
-                centroids.append(cx)
-                distances = distances*self.distance_calculator(data,cx)
-                data = np.delete(data,(index_cx),axis = 0)
-                distances = np.delete(distances,(index_cx),axis = 0)
+        data = np.delete(data,(index_c1),axis = 0)
+        centroids = [c1]
+        distances = self.distance_calculator(data,c1)
+        for i in range(0,self.K-1):
+            index_cx = np.argmax(distances)
+            cx = data[index_cx]
+            centroids.append(cx)
+            distances = distances*self.distance_calculator(data,cx)
+            data = np.delete(data,(index_cx),axis = 0)
+            distances = np.delete(distances,(index_cx),axis = 0)
         return centroids
 
 
@@ -96,4 +92,7 @@ class KMeans:
 
 data=np.loadtxt("Data.txt")
 class_ = KMeans(data, 3)
+class_.train()
+data=np.loadtxt("s1.txt")
+class_ = KMeans(data, 15, iterations = 150)
 class_.train()
