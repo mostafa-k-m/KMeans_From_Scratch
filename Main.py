@@ -87,12 +87,3 @@ class KMeans:
             counter+=1
         f = self.scatterer(data, centroids, hue = rnk)
         f.show()
-
-
-
-data=np.loadtxt("Data.txt")
-class_ = KMeans(data, 3)
-class_.train()
-data=np.loadtxt("s1.txt")
-class_ = KMeans(data, 15, iterations = 150)
-class_.train()
