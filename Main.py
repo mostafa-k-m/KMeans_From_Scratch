@@ -28,15 +28,15 @@ class KMeans:
         c2 = data[index_c2]
         data = np.delete(data,(index_c1,index_c2),axis = 0)
         centroids = [c1, c2]
-        for i in range(0,self.K-2):
-            distances_list = []
-            for j in range(0, i+2):
-                distances_list.append(self.distance_calculator(data,centroids[j]))
-            distances = np.prod(distances_list)
-            index_cx = np.argmax(distances)
-            cx = data[index_cx]
-            data = np.delete(data,(index_cx),axis = 0)
-            centroids.append(cx)
+        distances = self.distance_calculator(data,c1)*self.distance_calculator(data,c2)
+        if self.K>2:
+            for i in range(0,self.K-2):
+                index_cx = np.argmax(distances)
+                cx = data[index_cx]
+                centroids.append(cx)
+                distances = distances*self.distance_calculator(data,cx)
+                data = np.delete(data,(index_cx),axis = 0)
+                distances = np.delete(distances,(index_cx),axis = 0)
         return centroids
 
 
@@ -81,6 +81,7 @@ class KMeans:
     def train(self):
         data = self.data
         counter = 0
+
         while(counter <self.iterations):
             centroids = self.m_selector(data)
             rnk = self.Membership(data, centroids)
@@ -88,9 +89,11 @@ class KMeans:
             if self.Stopping_Criteria(data, centroids, centroids_2):
                 centroids = centroids_2
             counter+=1
-
         f = self.scatterer(data, centroids, hue = rnk)
         f.show()
 
+
+
+data=np.loadtxt("Data.txt")
 class_ = KMeans(data, 3)
 class_.train()
