@@ -66,9 +66,7 @@ class KMeans:
         return Avgdist
 
 
-    def stopping_Criteria(self, data, centroids_1, centroids_2):
-        rnk_1 = self.membership(data, centroids_1)
-        rnk_2 = self.membership(data, centroids_2)
+    def stopping_Criteria(self, data, centroids_1, centroids_2, rnk_1, rnk_2):
         return self.objective_Function(data,rnk_2, centroids_2)< self.objective_Function(data,rnk_1, centroids_1)
 
     def train(self):
@@ -79,7 +77,7 @@ class KMeans:
         while(counter <self.iterations):
             centroids_2 = self.update_centroids(data, centroids, rnk)
             rnk_2 = self.membership(data, centroids_2)
-            if self.stopping_Criteria(data, centroids, centroids_2):
+            if self.stopping_Criteria(data, centroids, centroids_2, rnk, rnk_2):
                 centroids = centroids_2
                 rnk = rnk_2
             counter+=1
