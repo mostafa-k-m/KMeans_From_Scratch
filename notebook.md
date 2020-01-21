@@ -8,10 +8,6 @@ import matplotlib.pylab as plt
 from KMeans import KMeans
 ```
 
-    /home/mostafakm/miniconda3/lib/python3.7/site-packages/matplotlib/figure.py:457: UserWarning: matplotlib is currently using a non-GUI backend, so cannot show the figure
-      "matplotlib is currently using a non-GUI backend, "
-
-
 
 ```python
 from sklearn.datasets import make_blobs
@@ -20,8 +16,12 @@ class_ = KMeans(X, 4, iterations = 5)
 class_.train()
 ```
 
+    /home/mostafakm/miniconda3/lib/python3.7/site-packages/matplotlib/figure.py:457: UserWarning: matplotlib is currently using a non-GUI backend, so cannot show the figure
+      "matplotlib is currently using a non-GUI backend, "
 
-![png](output_2_0.png)
+
+
+![png](output_2_1.png)
 
 
 

@@ -74,8 +74,10 @@ class KMeans:
         counter = 0
         centroids = self.centroid_selector(data)
         rnk = self.membership(data, centroids)
+        centroids_2 = centroids
+        rnk_2 = rnk
         while(counter <self.iterations):
-            centroids_2 = self.update_centroids(data, centroids, rnk)
+            centroids_2 = self.update_centroids(data, centroids_2, rnk)
             rnk_2 = self.membership(data, centroids_2)
             if self.stopping_Criteria(data, centroids, centroids_2, rnk, rnk_2):
                 centroids = centroids_2
