@@ -20,7 +20,7 @@ class KMeans:
             plt.scatter(centroids[i][0],centroids[i][1],c="red")
         return f
 
-    def m_selector(self, data):
+    def centroid_selector(self, data):
         index_c1 = np.random.randint(0,data.shape[0])
         c1 = data[index_c1]
         data = np.delete(data,(index_c1),axis = 0)
@@ -30,13 +30,13 @@ class KMeans:
             index_cx = np.argmax(distances)
             cx = data[index_cx]
             centroids.append(cx)
-            distances = distances*self.distance_calculator(data,cx)
+            distances = (np.vstack((distances,self.distance_calculator(data,cx)))).min(axis=0)
             data = np.delete(data,(index_cx),axis = 0)
             distances = np.delete(distances,(index_cx),axis = 0)
         return centroids
 
 
-    def Membership(self, data,centroids):
+    def membership(self, data,centroids):
         distances_list = []
         for i in range(0, self.K):
             distances_list.append(self.distance_calculator(data, centroids[i]))
@@ -47,8 +47,8 @@ class KMeans:
         return np.asarray(rnk)
 
 
-    def Update_centroids(self, data, centroids, rnk):
-        labels = self.Membership(data,centroids).reshape(data.shape[0],1)
+    def update_centroids(self, data, centroids, rnk):
+        labels = self.membership(data,centroids).reshape(data.shape[0],1)
         data_ = np.hstack((data,rnk.reshape(data.shape[0],1)))
         centroids = []
         for i in range(0,self.K):
@@ -59,7 +59,7 @@ class KMeans:
         return centroids
 
 
-    def Objective_Function(self, data, rnk, centroids):
+    def objective_Function(self, data, rnk, centroids):
         data_ = np.hstack((data,rnk.reshape(data.shape[0],1)))
 
         Avgdist = 0
@@ -69,20 +69,20 @@ class KMeans:
         return Avgdist
 
 
-    def Stopping_Criteria(self, data, centroids_1, centroids_2):
-        rnk_1 = self.Membership(data, centroids_1)
-        rnk_2 = self.Membership(data, centroids_2)
-        return self.Objective_Function(data,rnk_2, centroids_2)< self.Objective_Function(data,rnk_1, centroids_1)
+    def stopping_Criteria(self, data, centroids_1, centroids_2):
+        rnk_1 = self.membership(data, centroids_1)
+        rnk_2 = self.membership(data, centroids_2)
+        return self.objective_Function(data,rnk_2, centroids_2)< self.objective_Function(data,rnk_1, centroids_1)
 
     def train(self):
         data = self.data
         counter = 0
 
         while(counter <self.iterations):
-            centroids = self.m_selector(data)
-            rnk = self.Membership(data, centroids)
-            centroids_2 = self.Update_centroids(data, centroids, rnk)
-            if self.Stopping_Criteria(data, centroids, centroids_2):
+            centroids = self.centroid_selector(data)
+            rnk = self.membership(data, centroids)
+            centroids_2 = self.update_centroids(data, centroids, rnk)
+            if self.stopping_Criteria(data, centroids, centroids_2):
                 centroids = centroids_2
             counter+=1
         f = self.scatterer(data, centroids, hue = rnk)
