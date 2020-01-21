@@ -74,13 +74,14 @@ class KMeans:
     def train(self):
         data = self.data
         counter = 0
-
+        centroids = self.centroid_selector(data)
+        rnk = self.membership(data, centroids)
         while(counter <self.iterations):
-            centroids = self.centroid_selector(data)
-            rnk = self.membership(data, centroids)
             centroids_2 = self.update_centroids(data, centroids, rnk)
+            rnk_2 = self.membership(data, centroids_2)
             if self.stopping_Criteria(data, centroids, centroids_2):
                 centroids = centroids_2
+                rnk = rnk_2
             counter+=1
         f = self.scatterer(data, centroids, hue = rnk)
         f.show()
