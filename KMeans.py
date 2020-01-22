@@ -56,7 +56,7 @@ class KMeans:
         return centroids
 
 
-    def objective_Function(self, data, rnk, centroids):
+    def objective_function(self, data, rnk, centroids):
         data_ = np.hstack((data,rnk.reshape(data.shape[0],1)))
 
         Avgdist = 0
@@ -66,8 +66,8 @@ class KMeans:
         return Avgdist
 
 
-    def stopping_Criteria(self, data, centroids_1, centroids_2, rnk_1, rnk_2):
-        return self.objective_Function(data,rnk_2, centroids_2)< self.objective_Function(data,rnk_1, centroids_1)
+    def stopping_criteria(self, data, centroids_1, centroids_2, rnk_1, rnk_2):
+        return self.objective_function(data,rnk_2, centroids_2)< self.objective_function(data,rnk_1, centroids_1)
 
     def train(self):
         data = self.data
@@ -79,7 +79,7 @@ class KMeans:
         while(counter <self.iterations):
             centroids_2 = self.update_centroids(data, centroids_2, rnk)
             rnk_2 = self.membership(data, centroids_2)
-            if self.stopping_Criteria(data, centroids, centroids_2, rnk, rnk_2):
+            if self.stopping_criteria(data, centroids, centroids_2, rnk, rnk_2):
                 centroids = centroids_2
                 rnk = rnk_2
             counter+=1
